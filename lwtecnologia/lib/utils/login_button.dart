@@ -20,10 +20,14 @@ class LoginButton extends StatelessWidget {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: function,
-        child: Text("Login",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(
+          "Entrar",
+          textAlign: TextAlign.center,
+          style: style.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

@@ -29,14 +29,6 @@ class _MainPagesState extends State<MainPages> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _pageController = new PageController();
-    Auth()
-        .read()
-        .then((result) => result.isEmpty
-            ? Navigator.pushReplacementNamed(context, LoginScreen.id)
-            : Offstage())
-        .catchError((error) {
-      print('Erro : $error');
-    });
   }
 
   @override

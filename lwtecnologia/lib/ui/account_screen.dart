@@ -14,7 +14,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder<Auth>(
-      future: Auth().fetchGet(''),
+      future: Auth.read(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Center(

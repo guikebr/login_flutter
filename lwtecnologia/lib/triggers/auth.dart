@@ -1,51 +1,49 @@
-import 'package:http/http.dart';
-import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
   final String uid;
   final String token;
+  final bool on;
+  final List<dynamic> cars;
 
-  Auth({this.uid, this.token});
+  Auth({this.uid, this.token, this.on, this.cars});
 
-  Future<File> write(String jwt) async {
-    final directory = await getTemporaryDirectory();
-    final path = directory.path;
-    final file = File('$path/auth.txt');
-    return file.writeAsString('$jwt');
+  Future<void> write(uid, token, on, cars) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('uid', uid);
+    prefs.setString('token', token);
+    prefs.setBool('on', on);
+    prefs.setStringList(uid, cars);
   }
 
-  Future<String> read() async {
+  static Future<Auth> read() async {
     try {
-      //in a file or using
-      final directory = await getTemporaryDirectory();
-      final path = directory.path;
-      final file = File('$path/auth.txt');
-      String contents = await file.readAsString();
-      print(contents);
-      return contents;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var uid = '';
+      var token = '';
+      var on = false;
+      List<dynamic> cars = [];
+      if (prefs != null) {
+        uid = prefs.getString('uid');
+        token = prefs.getString('token');
+        on = prefs.getBool('on');
+        cars = prefs.getStringList(uid);
+      }
+
+      print('$uid e $token e $on e $cars');
+      return new Auth.fromData(uid, token, on, cars);
     } catch (e) {
-      return '';
+      return e;
     }
   }
 
-  Future<Auth> fetchGet(uid) async {
-    final response = await get("https://www.google.com");
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return Auth.fromJson(json.decode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load get');
-    }
-  }
-
-  factory Auth.fromJson(Map<String, dynamic> json) {
+  factory Auth.fromData(uid, token, on, cars) {
     return Auth(
-      uid: json['uid'],
-      token: json['token'],
+      uid: uid,
+      token: token,
+      on: on,
+      cars: cars,
     );
   }
 }

@@ -11,14 +11,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextStyle style = new TextStyle(fontFamily: 'Roboto Light', fontSize: 20.0);
+
+  TextEditingController _controllerEmail = new TextEditingController();
+  TextEditingController _controllerPassword = new TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controllerEmail.dispose();
+    _controllerPassword.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _controllerEmail = new TextEditingController();
-    TextEditingController _controllerPassword = new TextEditingController();
-
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: Center(
         child: Container(
@@ -67,8 +76,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: new LoginButton(
                     style: style,
                     function: () => Auth().write(
-                      "${_controllerEmail.text} and ${_controllerPassword.text}",
-                    ),
+                      _controllerEmail.text,
+                      _controllerPassword.text,
+                      true,
+                      [],
+                    ).catchError((e) => print(e)),
                   ),
                 ),
                 SizedBox(
