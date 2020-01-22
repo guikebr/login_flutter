@@ -31,10 +31,10 @@ class Auth {
     }
   }
 
-  static deleteData() async {
+  static Future<void> deleteData() async {
     final file = await _getFile();
 
-    return file.deleteSync(recursive: true);
+    return file.delete();
   }
 
   static authentication(bool login) {

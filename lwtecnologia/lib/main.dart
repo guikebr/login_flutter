@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:lwtecnologia/ui/account_screen.dart';
+import 'package:lwtecnologia/ui/item_car.dart';
 import 'package:lwtecnologia/ui/login_screen.dart';
 import 'package:lwtecnologia/ui/main_pages.dart';
 import 'package:lwtecnologia/ui/search_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         SearchScreen.id: (context) => SearchScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         SplashScreen.id: (context) => SplashScreen(),
+        ItemCar.id: (context) => ItemCar(),
       },
     );
   }

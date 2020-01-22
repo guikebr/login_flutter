@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lwtecnologia/triggers/auth.dart';
+import 'package:lwtecnologia/ui/item_car.dart';
 
 class AccountScreen extends StatefulWidget {
   static String id = 'account_screen';
@@ -27,7 +28,9 @@ class _AccountScreenState extends State<AccountScreen> {
           style: TextStyle(fontFamily: 'Roboto Regular', letterSpacing: 1),
         ),
         backgroundColor: Theme.of(context).accentColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, ItemCar.id);
+        },
       ),
     );
   }
