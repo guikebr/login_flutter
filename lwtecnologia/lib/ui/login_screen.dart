@@ -35,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomPadding: false,
       body: Center(
         child: Container(
-          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(36.0),
             child: Column(

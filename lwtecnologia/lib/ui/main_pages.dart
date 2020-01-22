@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lwtecnologia/bloc/prefs_theme.dart';
+import 'package:lwtecnologia/bloc/theme.dart';
 import 'package:lwtecnologia/triggers/auth.dart';
 import 'package:lwtecnologia/triggers/cars.dart';
 import 'package:lwtecnologia/ui/account_screen.dart';
 import 'package:lwtecnologia/ui/login_screen.dart';
 import 'package:lwtecnologia/ui/search_screen.dart';
 import 'package:lwtecnologia/utils/icon_badge.dart';
+import 'package:provider/provider.dart';
 
 class MainPages extends StatefulWidget {
   static String id = 'main_pages';
@@ -77,6 +80,7 @@ class _MainPagesState extends State<MainPages> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -108,7 +112,17 @@ class _MainPagesState extends State<MainPages> {
             child: Builder(
               builder: (context) => IconButton(
                 icon: Icon(Icons.wb_sunny),
-                onPressed: () {},
+                //Altera o tema do app
+                onPressed: () {
+                  if (PrefsTheme.singleton().getTheme() != 'Dark') {
+                    PrefsTheme.singleton().setTheme("Dark");
+                    theme.setTheme(ThemeData.dark());
+                  } else {
+                    PrefsTheme.singleton().setTheme("Light");
+                    theme.setTheme(ThemeData.light());
+                  }
+                  PrefsTheme.singleton().systemThemeUpdated();
+                },
               ),
             ),
           ),

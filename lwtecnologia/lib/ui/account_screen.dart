@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lwtecnologia/triggers/cars.dart';
 import 'package:lwtecnologia/ui/item_car.dart';
-import 'package:lwtecnologia/utils/show_snack_bar.dart';
 
 class AccountScreen extends StatefulWidget {
   static String id = 'account_screen';
