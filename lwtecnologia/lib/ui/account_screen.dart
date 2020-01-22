@@ -13,25 +13,22 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder<Auth>(
-      future: Auth.read(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Center(
-            child: Text(
-              "Token de usuário ${snapshot.data.token}",
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text("Erro ao carregar o perfil ${snapshot.hashCode}"),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return Scaffold(
+      body: Center(
+        child: Text(Auth.user),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: new FloatingActionButton.extended(
+        icon: Icon(Icons.place),
+        elevation: 0.0,
+        label: Text(
+          "Adicionar carro",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: 'Roboto Regular', letterSpacing: 1),
+        ),
+        backgroundColor: Theme.of(context).accentColor,
+        onPressed: () {},
+      ),
     );
   }
 }

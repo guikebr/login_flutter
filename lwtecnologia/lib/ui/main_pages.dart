@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lwtecnologia/triggers/auth.dart';
+import 'package:lwtecnologia/triggers/cars.dart';
 import 'package:lwtecnologia/ui/account_screen.dart';
 import 'package:lwtecnologia/ui/login_screen.dart';
 import 'package:lwtecnologia/ui/search_screen.dart';
@@ -12,7 +15,7 @@ class MainPages extends StatefulWidget {
   _MainPagesState createState() => _MainPagesState();
 }
 
-class _MainPagesState extends State<MainPages> with WidgetsBindingObserver {
+class _MainPagesState extends State<MainPages> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   PageController _pageController = PageController(
@@ -22,13 +25,27 @@ class _MainPagesState extends State<MainPages> with WidgetsBindingObserver {
   String namePage = 'Principal';
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {}
-
-  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _pageController = new PageController();
+
+    if (Auth.user.isNotEmpty) {
+      Map<String, dynamic> newList = Map();
+      newList["uid"] = 'carlos';
+      newList["type"] = 'Uno';
+      Cars.toList.add(newList);
+      Cars.readData().then((results) {
+        if (results != null) {
+          final cars = json.decode(results);
+          print(results);
+          for (var car in cars) {
+            setState(() {
+              print(car);
+            });
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -73,6 +90,21 @@ class _MainPagesState extends State<MainPages> with WidgetsBindingObserver {
           ),
         ),
         centerTitle: true,
+        actions: <Widget>[
+          Visibility(
+            visible: namePage == 'Perfil',
+            child: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  Auth.authentication(false);
+
+                  Navigator.pushReplacementNamed(context, LoginScreen.id);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       body: PageView(
         physics: NeverScrollableScrollPhysics(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lwtecnologia/triggers/auth.dart';
 import 'package:lwtecnologia/ui/login_screen.dart';
@@ -11,31 +13,34 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _State extends State<SplashScreen> {
-  TextStyle style = new TextStyle(fontFamily: 'Roboto Regular', fontSize: 20.0);
+  @override
+  void initState() {
+    super.initState();
+    Auth.readData().then((results) {
+      if (results != null) {
+        final users = json.decode(results);
+
+        for (var user in users) {
+          print(user);
+          Auth.toList.add(user);
+          if (user['isLoged']) {
+            Auth.user = user['uid'];
+            Navigator.pushReplacementNamed(context, MainPages.id);
+          } else {
+            Navigator.pushReplacementNamed(context, LoginScreen.id);
+          }
+        }
+      } else {
+        Navigator.pushReplacementNamed(context, LoginScreen.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: new FutureBuilder<Auth>(
-        future: Auth.read(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            print(" teste ${snapshot.data.on}");
-            if (snapshot.data.on) {
-              Navigator.pushReplacementNamed(context, MainPages.id);
-            } else {
-              Navigator.pushReplacementNamed(context, LoginScreen.id);
-            }
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: new CircularProgressIndicator());
-          } else {
-            return new Center(
-              child: new LoginScreen(),
-            );
-          }
-          return Center(child: new CircularProgressIndicator());
-        },
+      body: new Center(
+        child: new CircularProgressIndicator(),
       ),
     );
   }

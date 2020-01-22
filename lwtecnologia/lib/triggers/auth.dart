@@ -1,49 +1,64 @@
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 
 class Auth {
-  final String uid;
-  final String token;
-  final bool on;
-  final List<dynamic> cars;
+  static File jsonFile;
+  static Directory dir;
+  static List toList = [];
+  static String user;
 
-  Auth({this.uid, this.token, this.on, this.cars});
-
-  Future<void> write(uid, token, on, cars) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('uid', uid);
-    prefs.setString('token', token);
-    prefs.setBool('on', on);
-    prefs.setStringList(uid, cars);
+  static Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/logger.json");
   }
 
-  static Future<Auth> read() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var uid = '';
-      var token = '';
-      var on = false;
-      List<dynamic> cars = [];
-      if (prefs != null) {
-        uid = prefs.getString('uid');
-        token = prefs.getString('token');
-        on = prefs.getBool('on');
-        cars = prefs.getStringList(uid);
-      }
+  static saveData(dataList) async {
+    String data = json.encode(dataList);
+    print('salvo no json $data');
+    final file = await _getFile();
+    return file.writeAsStringSync(data);
+  }
 
-      print('$uid e $token e $on e $cars');
-      return new Auth.fromData(uid, token, on, cars);
+  static Future<String> readData() async {
+    try {
+      final file = await _getFile();
+
+      return file.readAsStringSync();
     } catch (e) {
-      return e;
+      return null;
     }
   }
 
-  factory Auth.fromData(uid, token, on, cars) {
-    return Auth(
-      uid: uid,
-      token: token,
-      on: on,
-      cars: cars,
-    );
+  static deleteData() async {
+    final file = await _getFile();
+
+    return file.deleteSync(recursive: true);
+  }
+
+  static authentication(bool login) {
+    List items = [];
+    for (var user in Auth.toList) {
+      if (user['uid'] == Auth.user) {
+        user['isLoged'] = login;
+      }
+      items.add(user);
+    }
+
+    Auth.deleteData();
+
+    for (var user in items) {
+      if (user['uid'] == Auth.user) {
+        Auth.user = user['uid'];
+        print(user);
+      }
+    }
+
+    Auth.saveData(items).then((_) {
+      print('salvo');
+    }).catchError((error) {
+      print(error);
+    });
   }
 }
