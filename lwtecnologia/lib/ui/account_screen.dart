@@ -75,12 +75,12 @@ class _AccountScreenState extends State<AccountScreen> {
           Cars.cars.removeAt(index);
           Cars.saveData(_lastRemoved);
           final snack = SnackBar(
-            content: Text("Carro \"${Cars.cars[index]['type']}\" foi removido"),
+            content: Text("Carro \"${_lastRemoved['type']}\" foi removido"),
             action: SnackBarAction(
               label: "Desfazer",
               onPressed: () {
                 setState(() {
-                  Cars.toList.insert(_lastRemovedPos, _lastRemoved);
+                  Cars.cars.insert(_lastRemovedPos, _lastRemoved);
                   Cars.saveData(Cars.toList);
                 });
               },
