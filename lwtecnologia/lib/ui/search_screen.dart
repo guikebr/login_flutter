@@ -17,19 +17,30 @@ class _SearchScreenState extends State<SearchScreen> {
         separatorBuilder: (context, index) {
           return Divider();
         },
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Icon(Icons.directions_car),
-            title: Text(
-              Cars.toList[index]['type'],
-              style: Theme.of(context).textTheme.headline,
+        itemBuilder: buildItem,
+      ),
+    );
+  }
+
+  Widget buildItem(context, index) {
+    return ListTile(
+      leading: Container(
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          child: ClipOval(
+            child: Image.network(
+              'https://picsum.photos/250?image=${index + 1000}',
             ),
-            subtitle: Text(
-              Cars.toList[index]['uid'],
-              style: Theme.of(context).textTheme.subhead,
-            ),
-          );
-        },
+          ),
+        ),
+      ),
+      title: Text(
+        Cars.toList[index]['type'],
+        style: Theme.of(context).textTheme.headline,
+      ),
+      subtitle: Text(
+        Cars.toList[index]['uid'],
+        style: Theme.of(context).textTheme.subhead,
       ),
     );
   }

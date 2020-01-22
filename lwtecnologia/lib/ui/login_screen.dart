@@ -91,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _controllerPassword.text.isEmpty) {
                               ShowSnackBar(_scaffoldKey)
                                   .showInSnackBar('Preencha os campos');
+                              return;
                             } else {
                               if (Auth.toList.isNotEmpty) {
                                 for (var user in Auth.toList) {
@@ -103,43 +104,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                     print('entrou');
                                     Navigator.pushReplacementNamed(
                                         context, MainPages.id);
-                                  } else if (user['uid'] ==
-                                          _controllerEmail.text &&
-                                      user['password'] !=
-                                          _controllerPassword.text) {
-                                    ShowSnackBar(_scaffoldKey).showInSnackBar(
-                                        'Autenticação inválida');
+                                    return;
                                   } else {
-                                    print('teste');
-                                    Auth.toList.add(newList);
-                                    Auth.user = _controllerEmail.text;
-
-                                    Auth.saveData(Auth.toList).then((_) {
-                                      Navigator.pushReplacementNamed(
-                                          context, MainPages.id);
-                                    }).catchError((error) {
-                                      save = true;
-                                      print(error);
-                                    });
-                                    break;
+                                    if (user['uid'] == _controllerEmail.text &&
+                                        user['password'] !=
+                                            _controllerPassword.text) {
+                                      ShowSnackBar(_scaffoldKey).showInSnackBar(
+                                          'Autenticação inválida');
+                                      return;
+                                    }
                                   }
                                 }
-                              } else {
-                                print('novo usuario');
-
-                                Auth.user = _controllerEmail.text;
-                                Auth.toList.add(newList);
-
-                                Auth.saveData(Auth.toList).then((_) {
-                                  Navigator.pushReplacementNamed(
-                                      context, MainPages.id);
-                                }).catchError((error) {
-                                  save = true;
-                                  print(error);
-                                });
                               }
+                              Auth.toList.add(newList);
+                              Auth.user = _controllerEmail.text;
+
+                              Auth.saveData(Auth.toList).then((_) {
+                                Navigator.pushReplacementNamed(
+                                    context, MainPages.id);
+                              }).catchError((error) {
+                                save = true;
+                                print(error);
+                              });
                             }
-                          })
+                          },
+                        )
                       : new CircularProgressIndicator(),
                 ),
                 SizedBox(

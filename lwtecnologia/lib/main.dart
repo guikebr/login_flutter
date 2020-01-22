@@ -6,11 +6,8 @@ import 'package:lwtecnologia/ui/login_screen.dart';
 import 'package:lwtecnologia/ui/main_pages.dart';
 import 'package:lwtecnologia/ui/search_screen.dart';
 import 'package:lwtecnologia/ui/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-
-  SharedPreferences.setMockInitialValues({});
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }

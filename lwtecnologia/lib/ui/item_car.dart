@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lwtecnologia/triggers/auth.dart';
+import 'package:lwtecnologia/triggers/cars.dart';
 import 'package:lwtecnologia/utils/build_material_button.dart';
 
 class ItemCar extends StatefulWidget {
@@ -14,8 +16,6 @@ class _ItemCarState extends State<ItemCar> {
   TextEditingController _controllerName = new TextEditingController();
   TextEditingController _controllerPlate = new TextEditingController();
   TextEditingController _controllerYear = new TextEditingController();
-
-  Map<String, dynamic> newList = Map();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,8 @@ class _ItemCarState extends State<ItemCar> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             buildTextField(
                 _controllerName, 'Nome do carro', TextInputType.text),
@@ -51,9 +53,19 @@ class _ItemCarState extends State<ItemCar> {
         child: BuildMaterialButton(
           style: style,
           function: () {
-            newList["name"] = _controllerName.text;
-            newList["password"] = _controllerPlate.text;
+            Map<String, dynamic> newList = Map();
+            newList["uid"] = Auth.user;
+            newList["type"] = _controllerName.text;
+            newList["plate"] = _controllerPlate.text;
             newList["year"] = _controllerYear.text;
+            Cars.toList.add(newList);
+
+            Cars.saveData(Cars.toList).then((_) {
+              Cars.updateCar();
+              Navigator.pop(context);
+            }).catchError((error) {
+              print(error);
+            });
           },
         ),
       ),

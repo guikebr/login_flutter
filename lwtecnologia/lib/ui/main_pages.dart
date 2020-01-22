@@ -30,15 +30,14 @@ class _MainPagesState extends State<MainPages> {
     _pageController = new PageController();
 
     if (Auth.user.isNotEmpty) {
-      Map<String, dynamic> newList = Map();
-      newList["uid"] = 'carlos';
-      newList["type"] = 'Uno';
-      Cars.toList.add(newList);
       Cars.readData().then((results) {
+        print(results);
         if (results != null) {
+          Cars.toList.clear();
           final cars = json.decode(results);
           print(results);
           for (var car in cars) {
+            Cars.toList.add(car);
             setState(() {
               print(car);
             });
@@ -101,6 +100,15 @@ class _MainPagesState extends State<MainPages> {
 
                   Navigator.pushReplacementNamed(context, LoginScreen.id);
                 },
+              ),
+            ),
+          ),
+          Visibility(
+            visible: namePage == 'Principal',
+            child: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.wb_sunny),
+                onPressed: () {},
               ),
             ),
           ),

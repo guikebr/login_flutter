@@ -6,14 +6,16 @@ class ShowSnackBar {
   ShowSnackBar(this.scaffoldKey);
 
   void showInSnackBar(String value) {
-    scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(
-        value,
-        style: TextStyle(
-          fontFamily: 'Roboto Regular',
-          letterSpacing: 1,
+    scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'Roboto Regular',
+            letterSpacing: 1,
+          ),
         ),
       ),
-    ));
+    );
   }
 }
